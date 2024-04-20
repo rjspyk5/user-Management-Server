@@ -24,8 +24,13 @@ const run = async () => {
     await client.connect();
     await client.db("admin").command({ ping: 1 });
     console.log("database connected");
+    const userCollection = client.db("usersDB").collection("user");
+    app.post("/user", async (req, res) => {
+      const user = req.body;
+      const result = await userCollection.insertOne(user);
+      res.send(result);
+    });
   } finally {
-    await client.close();
   }
 };
 run().catch(console.dir);
