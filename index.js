@@ -30,6 +30,22 @@ const run = async () => {
       const result = await cursor.toArray();
       res.send(result);
     });
+    // update data
+    app.put("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const data = req.body;
+      const filter = { _id: new Object(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          email: data.email,
+          pass: data.pass,
+        },
+      };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.send(result);
+    });
+
     // get single data from database
     app.get("/users/:id", async (req, res) => {
       const id = req.params.id;
