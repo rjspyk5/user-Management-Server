@@ -30,6 +30,14 @@ const run = async () => {
       const result = await cursor.toArray();
       res.send(result);
     });
+    // get single data from database
+    app.get("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await userCollection.findOne(query);
+      res.send(result);
+    });
+
     // sending data to the database
     app.post("/user", async (req, res) => {
       const user = req.body;
@@ -40,7 +48,6 @@ const run = async () => {
     app.delete("/users/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      console.log("trying to delete");
       const result = await userCollection.deleteOne(query);
       res.send(result);
     });
@@ -49,7 +56,4 @@ const run = async () => {
 };
 run().catch(console.dir);
 
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
 app.listen(port, () => console.log("server running"));
